@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Compass — Indoor Navigation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Campus Compass</h1>
+      <p>Indoor Navigation Demo · SITCOE First Floor</p>
+    </div>
+    <span class="badge">NO GPS ROUTING</span>
+  </header>
+
+  <main class="layout">
+    <aside class="panel">
+      <h2>Navigate</h2>
+
+      <label for="start">Start location</label>
+      <select id="start"></select>
+
+      <label for="destination">Destination</label>
+      <select id="destination"></select>
+
+      <div class="button-row">
+        <button id="routeBtn" class="primary">Find Route</button>
+        <button id="clearBtn">Clear</button>
+      </div>
+
+      <div class="location-box">
+        <strong>Indoor position</strong>
+        <p id="positionText">Demo position: First Floor Entrance</p>
+        <button id="qrBtn">Simulate QR Scan</button>
+      </div>
+
+      <div class="instructions">
+        <h3>Directions</h3>
+        <ol id="instructionsList">
+          <li>Select start and destination.</li>
+          <li>Click <b>Find Route</b>.</li>
+        </ol>
+      </div>
+
+      <div class="legend">
+        <h3>Legend</h3>
+        <div><span class="dot user"></span> Current location</div>
+        <div><span class="dot room"></span> Destination</div>
+        <div><span class="line route"></span> Calculated route</div>
+        <div><span class="line corridor"></span> Walkable corridor</div>
+      </div>
+    </aside>
+
+    <section class="map-panel">
+      <div class="map-toolbar">
+        <strong>FIRST FLOOR</strong>
+        <div>
+          <button id="zoomIn">+</button>
+          <button id="zoomOut">−</button>
+          <button id="resetZoom">Reset</button>
+        </div>
+      </div>
+
+      <div id="mapViewport" class="map-viewport">
+        <div id="mapCanvas" class="map-canvas">
+          <svg id="floorMap" viewBox="0 0 1100 760" aria-label="SITCOE first floor indoor map">
+            <!-- Building outline -->
+            <rect x="40" y="35" width="1020" height="680" class="building"/>
+
+            <!-- Rooms: left side -->
+            <g class="room" data-node="vlab">
+              <rect x="60" y="65" width="190" height="100"/>
+              <text x="155" y="105">VLSI &amp; Embedded</text>
+              <text x="155" y="126">Laboratory</text>
+            </g>
+            <g class="room" data-node="vlsi2">
+              <rect x="250" y="65" width="155" height="100"/>
+              <text x="327" y="105">VLSI &amp; Embedded</text>
+              <text x="327" y="126">Laboratory</text>
+            </g>
+            <g class="room" data-node="class101">
+              <rect x="60" y="165" width="345" height="100"/>
+              <text x="232" y="212">Class Room</text>
+              <text x="232" y="232">Area ≈ 66.50</text>
+            </g>
+            <g class="room" data-node="class102">
+              <rect x="60" y="265" width="345" height="90"/>
+              <text x="232" y="305">Class Room</text>
+              <text x="232" y="325">Area ≈ 66.50</text>
+            </g>
+            <g class="room" data-node="rd">
+              <rect x="60" y="355" width="345" height="100"/>
+              <text x="232" y="395">Research &amp;</text>
+              <text x="232" y="416">Development Centre</text>
+            </g>
+            <g class="room" data-node="class103">
+              <rect x="60" y="455" width="345" height="90"/>
+              <text x="232" y="495">Class Room</text>
+              <text x="232" y="515">Area ≈ 66.50</text>
+            </g>
+            <g class="room" data-node="class104">
+              <rect x="60" y="545" width="345" height="90"/>
+              <text x="232" y="585">Class Room</text>
+              <text x="232" y="605">Area ≈ 66.50</text>
+            </g>
+
+            <!-- Left bottom -->
+            <g class="room" data-node="startup">
+              <rect x="60" y="635" width="250" height="60"/>
+              <text x="185" y="668">Startup Cell / Center</text>
+            </g>
+
+            <!-- Right side -->
+            <g class="room" data-node="class105">
+              <rect x="815" y="65" width="225" height="125"/>
+              <text x="927" y="115">Class Room</text>
+              <text x="927" y="136">Area ≈ 63.00</text>
+            </g>
+            <g class="room" data-node="iot">
+              <rect x="815" y="190" width="225" height="90"/>
+              <text x="927" y="228">IoT</text>
+              <text x="927" y="250">Laboratory</text>
+            </g>
+            <g class="room" data-node="programming">
+              <rect x="815" y="280" width="225" height="90"/>
+              <text x="927" y="318">Programming</text>
+              <text x="927" y="340">Laboratory</text>
+            </g>
+            <g class="room" data-node="language">
+              <rect x="815" y="370" width="225" height="90"/>
+              <text x="927" y="408">Language</text>
+              <text x="927" y="430">Laboratory</text>
+            </g>
+            <g class="room" data-node="network">
+              <rect x="815" y="460" width="225" height="90"/>
+              <text x="927" y="498">Computer Network</text>
+              <text x="927" y="520">Laboratory</text>
+            </g>
+            <g class="room" data-node="microprocessor">
+              <rect x="815" y="550" width="225" height="75"/>
+              <text x="927" y="582">Microprocessor</text>
+              <text x="927" y="603">Laboratory</text>
+            </g>
+            <g class="room" data-node="os">
+              <rect x="815" y="625" width="225" height="70"/>
+              <text x="927" y="657">Operating System Lab</text>
+            </g>
+
+            <!-- Bottom rooms -->
+            <g class="room" data-node="tutorial">
+              <rect x="405" y="635" width="125" height="60"/>
+              <text x="467" y="668">Tutorial Room</text>
+            </g>
+            <g class="room" data-node="db">
+              <rect x="530" y="635" width="145" height="60"/>
+              <text x="602" y="668">Database Lab</text>
+            </g>
+            <g class="room" data-node="web">
+              <rect x="675" y="635" width="140" height="60"/>
+              <text x="745" y="668">Web Technology</text>
+            </g>
+
+            <!-- Staircase -->
+            <g class="stair" data-node="stairs">
+              <rect x="310" y="55" width="80" height="85"/>
+              <text x="350" y="88">STAIRS</text>
+              <path d="M320 105 h55 M320 115 h55 M320 125 h55"/>
+            </g>
+
+            <!-- Central OTS/open space -->
+            <rect x="405" y="170" width="410" height="420" class="open-space"/>
+            <text x="610" y="380" class="ots">O.T.S.</text>
+            <text x="610" y="405" class="ots-small">OPEN / CENTRAL AREA</text>
+
+            <!-- Walkable corridor network -->
+            <g id="corridors">
+              <path d="M405 140 L405 170 L405 590 L405 635" class="corridor"/>
+              <path d="M815 140 L815 170 L815 590 L815 635" class="corridor"/>
+              <path d="M405 170 L815 170" class="corridor"/>
+              <path d="M405 590 L815 590" class="corridor"/>
+              <path d="M405 635 L815 635" class="corridor"/>
+              <path d="M405 140 L350 140 L350 55" class="corridor"/>
+              <path d="M405 215 L300 215" class="corridor"/>
+              <path d="M405 310 L300 310" class="corridor"/>
+              <path d="M405 405 L300 405" class="corridor"/>
+              <path d="M405 500 L300 500" class="corridor"/>
+              <path d="M405 590 L300 590" class="corridor"/>
+              <path d="M815 235 L780 235" class="corridor"/>
+              <path d="M815 325 L780 325" class="corridor"/>
+              <path d="M815 415 L780 415" class="corridor"/>
+              <path d="M815 505 L780 505" class="corridor"/>
+              <path d="M815 590 L780 590" class="corridor"/>
+            </g>
+
+            <!-- Navigation layer -->
+            <g id="routeLayer">
+              <polyline id="routeLine" points="" class="route-line"/>
+              <circle id="userMarker" cx="0" cy="0" r="13" class="user-marker" visibility="hidden"/>
+              <circle id="destinationMarker" cx="0" cy="0" r="12" class="destination-marker" visibility="hidden"/>
+            </g>
+
+            <!-- Node layer for demo/debug -->
+            <g id="nodeLayer"></g>
+          </svg>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Prototype: corridor-based indoor routing using an SVG floor plan + A* pathfinding.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
